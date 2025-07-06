@@ -75,7 +75,7 @@ double factorialAprox(int num)
 {
     int result = 1;
     //Вернуть n! ~ sqrt(2ПN)*(num/e)^num
-    return Math.Sqrt(2 * Math.PI * num) * Math.Pow(num / Math.E, num);
+    return (Math.Sqrt(2 * Math.PI * num) * Math.Pow(num / Math.E, num));
 }
 double factorial(int num)
 {
@@ -135,8 +135,33 @@ int MultinomialCoefficient(int n, params int[] numbers)
     }
     return n / denominator;
 }
+//тест всех методов:
+void TestAllMethods()
+{
+    //факториалы
+    int fact1 = -9;
+    int fact2 = 31;
+    int fact3 = 29;
+    BigInteger factBigInt = 36;
+
+
+    Console.WriteLine("Факториалы");
+    //Console.WriteLine($"Отрицательное число double factorial(int num): {factorial(fact1)}");
+    //Console.WriteLine($"double factorial(int num): {factorial(fact2)}");
+    Console.WriteLine($"double factorialAprox(int num): {factorialAprox(fact2)}");
+    //Console.WriteLine($"double factorial(int num): {factorial(fact3)}");
+    Console.WriteLine($"double factorialAprox(int num): {factorialAprox(fact3)}");
+    Console.WriteLine($"BigInteger Factorial(int num): {Factorial(fact2)}");
+    Console.WriteLine($"BigInteger Factorial(int num): {Factorial(fact3)}");
+
+}
 // Метод для общего случая типа (x1+3x2+...+x3^4)^5
 int MultinomialGeneralCase(int num)
+{
+    return num;
+}
+// Метод для частного случая при всех известных x
+int MultinomialParticularCase(int num)
 {
     return num;
 }
@@ -149,3 +174,5 @@ Console.WriteLine(factorial(5));
 
 //Console.WriteLine("ln(1/-x1 + Math.Sqrt(1/(x2*x2) + 1))"
 //    .Evaluate(new { x1 = 0.5, x2 = -0.5 }, context));
+
+TestAllMethods();
