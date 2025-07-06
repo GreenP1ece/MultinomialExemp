@@ -140,61 +140,47 @@ int MultinomialParticularCase(int num)
 void GetAllParametersOfMultinomialExpress(string input,
                                           out string[] sX,
                                           out string[] sXCoefs,
+                                          out string[] sXPows,
                                           out double sMainPow)
 {
     string inputWithoutWhiteSpaces = input.Replace(" ", "");
 
-    Regex sMainPowRegex = new Regex(@"(?<=\)\^).{1,}");
-    Regex sXRegex = new Regex(@"x\d+");
-    Regex sXCoefsRegex = new Regex(@"(?:(\d+(?:\.\d+)?)\*?)?x\d+");
+    Regex sMainPowRegex = new Regex(@"(?<=\)\^).+");
+    Regex sXRegex = new Regex(@"(?:(\d+(?:\.\d+)?)\*?)?x(\d+)(?:\^(\d+(?:\.\d+)?|\(\d+\/\d+\)))?");
+    //Regex sXPowsRegex = new Regex(@"\^(\d+(\.\d+)?|\(\d+\/\d+\))");
 
-    MatchCollection matchSMainPow = sMainPowRegex.Matches(inputWithoutWhiteSpaces);
-    MatchCollection matchSX = sXRegex.Matches(inputWithoutWhiteSpaces);
-    MatchCollection matchSXCoefs = sXCoefsRegex.Matches(inputWithoutWhiteSpaces);
-    if (matchSMainPow.Count > 0)
+    Match matchSMainPow = sMainPowRegex.Match(inputWithoutWhiteSpaces);
+
+    MatchCollection matches = sXRegex.Matches(inputWithoutWhiteSpaces);
+
+    sMainPow = matchSMainPow.Success ? Convert.ToDouble(matchSMainPow.Value) : 0;
+
+    sX = new string[matches.Count];
+    sXCoefs = new string[matches.Count];
+    sXPows = new string[matches.Count];
+
+    for (int i = 0; i < matches.Count; i++)
     {
-        sMainPow = Convert.ToDouble(matchSMainPow[0].Value);
-    }
-    else
-    {
-        Console.WriteLine("Совпадений не найдено");
-            sMainPow = 0;
-    }
-    if (matchSX.Count > 0)
-    {
-        sX = new string[matchSX.Count];
-        for (int i = 0; i < matchSX.Count; i++)
-        {
-            string xValue = matchSX[i].Value;
-            sX[i] = xValue;
-        }
-    }
-    else
-    {
-        sX = [];
-    }
-    if (matchSXCoefs.Count > 0)
-    {
-        sXCoefs = new string[matchSXCoefs.Count];
-        for (int i = 0; i < matchSXCoefs.Count; i++)
-        {
-            Match match = matchSXCoefs[i];
-            var coefGroup = match.Groups[1];
-            sXCoefs[i] = coefGroup.Success ? coefGroup.Value : "1";
-        }
-    }
-    else
-    {
-        sXCoefs = [];
+        Match match = matches[i];
+
+        string varIndex = match.Groups[2].Value;
+        string coef = match.Groups[1].Success ? match.Groups[1].Value : "1";
+        string pow = match.Groups[3].Success ? match.Groups[3].Value : "1";
+
+        sX[i] = $"x{varIndex}";
+        sXCoefs[i] = coef;
+        sXPows[i] = pow.Replace("(", "").Replace(")", "");
     }
 }
 //Проверка GetAllParametersOfMultinomialExpress
-GetAllParametersOfMultinomialExpress("(x1 + 3x2+ x3^(4/3) +2x4^3)^44,5", out string[] sX, out string[] sXCoefs, out double sMainPow); //Корректно для общей степени; для все xi...xn; 
+GetAllParametersOfMultinomialExpress("(x1 + 3x2+ x3^(4/3) +2x4^3)^44,5", out string[] sX, out string[] sXCoefs, out string[] sXPows, out double sMainPow); //Корректно для общей степени; для все xi...xn; 
 
 Console.WriteLine(sMainPow);
 foreach (var s in sX)
     Console.WriteLine(s);
 foreach (var d in sXCoefs)
     Console.WriteLine(d);
+foreach (var p in sXPows)
+    Console.WriteLine(p);
 //Тест факторивалов
 //TestAllMethods();
