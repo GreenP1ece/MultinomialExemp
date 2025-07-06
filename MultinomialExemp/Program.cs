@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using System.Text.RegularExpressions;
 using MathEvaluation.Context;
 using MathEvaluation.Extensions;
 
@@ -103,38 +104,6 @@ double factorial(int num)
     }
     return result;
 }
-int MultinomialCoefficient(int n, params int[] numbers)
-{
-    try
-    {
-        if (n < 0)
-        { 
-            throw new Exception("Мультиномиальный коэффициент неопределен"); 
-        }
-            
-        int numbersSum = 0;
-
-        foreach (int i in numbers) 
-        {
-            if (i > n || i < 0)
-            {
-                throw new Exception("Мультиномиальный коэффициент неопределен");
-            }
-            numbersSum = numbersSum + i;
-        }
-    }
-    catch(Exception e)
-    {
-        Console.WriteLine($"Ошибка: {e.Message}");
-    }
-    int result = 0;
-    int denominator = 1;
-    foreach (int number in numbers)
-    {
-        denominator = denominator * (int)factorial(number);
-    }
-    return n / denominator;
-}
 //тест всех методов:
 void TestAllMethods()
 {
@@ -165,14 +134,67 @@ int MultinomialParticularCase(int num)
 {
     return num;
 }
-Console.WriteLine(factorial(5));
 
+//Парсинг x-ов, коэффициентов, степеней и степени всего 
+//выражения в рамках общего случай
+void GetAllParametersOfMultinomialExpress(string input,
+                                          out string[] sX,
+                                          out string[] sXCoefs,
+                                          out double sMainPow)
+{
+    string inputWithoutWhiteSpaces = input.Replace(" ", "");
 
-//var context = new MathContext();
-//context.BindFunction(Math.Sqrt);
-//context.BindFunction(d => Math.Log(d), "ln");
+    Regex sMainPowRegex = new Regex(@"(?<=\)\^).{1,}");
+    Regex sXRegex = new Regex(@"x\d+");
+    Regex sXCoefsRegex = new Regex(@"(?:(\d+(?:\.\d+)?)\*?)?x\d+");
 
-//Console.WriteLine("ln(1/-x1 + Math.Sqrt(1/(x2*x2) + 1))"
-//    .Evaluate(new { x1 = 0.5, x2 = -0.5 }, context));
+    MatchCollection matchSMainPow = sMainPowRegex.Matches(inputWithoutWhiteSpaces);
+    MatchCollection matchSX = sXRegex.Matches(inputWithoutWhiteSpaces);
+    MatchCollection matchSXCoefs = sXCoefsRegex.Matches(inputWithoutWhiteSpaces);
+    if (matchSMainPow.Count > 0)
+    {
+        sMainPow = Convert.ToDouble(matchSMainPow[0].Value);
+    }
+    else
+    {
+        Console.WriteLine("Совпадений не найдено");
+            sMainPow = 0;
+    }
+    if (matchSX.Count > 0)
+    {
+        sX = new string[matchSX.Count];
+        for (int i = 0; i < matchSX.Count; i++)
+        {
+            string xValue = matchSX[i].Value;
+            sX[i] = xValue;
+        }
+    }
+    else
+    {
+        sX = [];
+    }
+    if (matchSXCoefs.Count > 0)
+    {
+        sXCoefs = new string[matchSXCoefs.Count];
+        for (int i = 0; i < matchSXCoefs.Count; i++)
+        {
+            Match match = matchSXCoefs[i];
+            var coefGroup = match.Groups[1];
+            sXCoefs[i] = coefGroup.Success ? coefGroup.Value : "1";
+        }
+    }
+    else
+    {
+        sXCoefs = [];
+    }
+}
+//Проверка GetAllParametersOfMultinomialExpress
+GetAllParametersOfMultinomialExpress("(x1 + 3x2+ x3^(4/3) +2x4^3)^44,5", out string[] sX, out string[] sXCoefs, out double sMainPow); //Корректно для общей степени; для все xi...xn; 
 
-TestAllMethods();
+Console.WriteLine(sMainPow);
+foreach (var s in sX)
+    Console.WriteLine(s);
+foreach (var d in sXCoefs)
+    Console.WriteLine(d);
+//Тест факторивалов
+//TestAllMethods();
