@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35828.75 d17.13
+VisualStudioVersion = 17.13.35828.75
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultinomialExemp", "MultinomialExemp\MultinomialExemp.csproj", "{5A424DE5-1506-4D4F-9783-EB44383BF516}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultinomialExempTest", "MultinomialExempTest\MultinomialExempTest.csproj", "{72884356-3903-4229-BB9A-B3DEB1EC5379}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{5A424DE5-1506-4D4F-9783-EB44383BF516}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5A424DE5-1506-4D4F-9783-EB44383BF516}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5A424DE5-1506-4D4F-9783-EB44383BF516}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72884356-3903-4229-BB9A-B3DEB1EC5379}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72884356-3903-4229-BB9A-B3DEB1EC5379}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72884356-3903-4229-BB9A-B3DEB1EC5379}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72884356-3903-4229-BB9A-B3DEB1EC5379}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

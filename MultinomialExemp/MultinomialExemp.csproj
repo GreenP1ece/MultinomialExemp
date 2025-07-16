@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="MathEvaluator" Version="2.3.1" />
+    <PackageReference Include="xunit" Version="2.9.3" />
   </ItemGroup>
 
 </Project>
