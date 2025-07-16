@@ -6,11 +6,11 @@ using MathEvaluation.Extensions;
 public class MultinomialExemp
 {
     static List<double> Logarithms = new List<double>();
-    ///<summary>
-    /// Gets an array of numbers, calculating the multinomial coefficient from them.
-    ///</summary>
-    ///<param name="numbers">A set of integers</param>
-    ///<returns>A high precision integer of type BigInteger</returns>>
+    /// <summary>
+    /// Calculates the exact multinomial coefficient based on the provided array of integers.
+    /// </summary>
+    /// <param name="numbers">An array of integers representing the exponents in a multinomial term.</param>
+    /// <returns>The multinomial coefficient as a <see cref="BigInteger"/>.</returns>
     public static BigInteger ComputeCoefficient(ulong[] numbers)
     {
         BigInteger numbersSum = 0;
@@ -25,6 +25,11 @@ public class MultinomialExemp
 
         return nominator / denominator;
     }
+    /// <summary>
+    /// Calculates an approximate multinomial coefficient using Stirling's approximation.
+    /// </summary>
+    /// <param name="numbers">An array of integers representing the exponents in the term.</param>
+    /// <returns>The approximated multinomial coefficient as a <see cref="BigInteger"/>.</returns>
     public static BigInteger BigArAprox(ulong[] numbers)
     {
         BigInteger numbersSum = 0;
@@ -39,11 +44,22 @@ public class MultinomialExemp
 
         return nominator / denominator;
     }
+    /// <summary>
+    /// Wrapper method that calculates an approximate multinomial coefficient using logarithmic methods.
+    /// </summary>
+    /// <param name="numbers">A variable number of integers representing the multinomial exponents.</param>
+    /// <returns>The approximated multinomial coefficient as an <see cref="ulong"/>.</returns>
 
     public static ulong LogCoefficient(params ulong[] numbers)
     {
         return ApproximateCoefficient(numbers);
     }
+    /// <summary>
+    /// Calculates an approximate multinomial coefficient using logarithms and exponentials
+    /// to avoid intermediate overflow and improve performance.
+    /// </summary>
+    /// <param name="numbers">An array of integers representing the exponents in the multinomial.</param>
+    /// <returns>The approximated coefficient as an <see cref="ulong"/>.</returns>
 
     public static ulong ApproximateCoefficient(ulong[] numbers)
     {
@@ -87,6 +103,11 @@ public class MultinomialExemp
 
         return (ulong)Math.Round(Math.Exp(sum));
     }
+    /// <summary>
+    /// Computes the exact factorial of a given number using iterative multiplication.
+    /// </summary>
+    /// <param name="n">A non-negative integer.</param>
+    /// <returns>The factorial value as a <see cref="BigInteger"/>.</returns>
 
     public static BigInteger Factorial(BigInteger n)
     {
@@ -95,6 +116,11 @@ public class MultinomialExemp
             result = result * i;
         return result;
     }
+    /// <summary>
+    /// Approximates the factorial of a number using Stirling’s formula.
+    /// </summary>
+    /// <param name="num">A non-negative integer.</param>
+    /// <returns>An approximate factorial value as a <see cref="BigInteger"/>.</returns>
 
     public static BigInteger ApproximateFactorial(int num)
     {
@@ -102,8 +128,15 @@ public class MultinomialExemp
         return (BigInteger)(Math.Sqrt(2 * Math.PI * num) * Math.Pow(num / Math.E, num));
     }
 
-    //Парсинг x-ов, коэффициентов, степеней и степени всего 
-    //выражения в рамках общего случая
+    /// <summary>
+    /// Parses a multinomial expression string of the form "(x1 + 2x2^3 + x3)^k"
+    /// into its component terms: variables, coefficients, powers, and main exponent.
+    /// </summary>
+    /// <param name="input">A string representing the multinomial expression, e.g., "(x1 + 2x2^3 + x3)^4".</param>
+    /// <param name="sX">An array of variable names (e.g., "x1", "x2", ...).</param>
+    /// <param name="sXCoefs">An array of coefficients for each variable (e.g., 1, 2, ...).</param>
+    /// <param name="sXPows">An array of powers (as strings) for each variable, allowing fractions or decimals.</param>
+    /// <param name="sMainPow">The main exponent applied to the entire expression (the power after the closing parenthesis).</param>
     public static void ParseMultinomial(string input,
                                               out string[] sX,
                                               out double[] sXCoefs,
@@ -139,6 +172,16 @@ public class MultinomialExemp
             sXPows[i] = pow.Replace("(", "").Replace(")", "");
         }
     }
+    /// <summary>
+    /// Generates all compositions (ordered partitions) of a number `n` into `k` elements,
+    /// each ranging from <paramref name="min_elem"/> to <paramref name="max_elem"/>.
+    /// </summary>
+    /// <param name="n">The target sum to partition.</param>
+    /// <param name="k">The number of elements in each composition.</param>
+    /// <param name="min_elem">The minimum value of each element.</param>
+    /// <param name="max_elem">The maximum value of each element.</param>
+    /// <returns>An enumerable of integer arrays representing the compositions.</returns>
+
     static IEnumerable<int[]> GenerateCompositions(int n, int k, int min_elem, int max_elem)
     {
         var allowed = Enumerable.Range(min_elem, max_elem - min_elem + 1)
@@ -171,6 +214,15 @@ public class MultinomialExemp
         }
         return helper(n, k, new List<int>());
     }
+    /// <summary>
+    /// Expands a symbolic multinomial expression using approximate multinomial coefficients for better performance.
+    /// </summary>
+    /// <param name="GenMultCoefsCount">The number of generated multinomial coefficients (unused internally).</param>
+    /// <param name="terms">An array of variable names (e.g., "x1", "x2").</param>
+    /// <param name="termsCoefs">An array of coefficients corresponding to each term.</param>
+    /// <param name="termsPows">An array of powers (as strings) for each variable.</param>
+    /// <param name="compositions">List of exponent combinations (compositions) for the multinomial expansion.</param>
+    /// <returns>The approximated expanded multinomial expression as a string.</returns>
     public static string ExpandMultinomialFast(int GenMultCoefsCount, string[] terms, double[] termsCoefs, string[] termsPows, List<ulong[]> compositions)
     {
         string result = "";
@@ -228,6 +280,16 @@ public class MultinomialExemp
         }
         return result.Remove(result.LastIndexOf(" + "));
     }
+    /// <summary>
+    /// Expands a symbolic multinomial expression using exact multinomial coefficients.
+    /// </summary>
+    /// <param name="GenMultCoefsCount">The number of generated multinomial coefficients (unused internally).</param>
+    /// <param name="terms">An array of variable names (e.g., "x1", "x2").</param>
+    /// <param name="termsCoefs">An array of coefficients corresponding to each term.</param>
+    /// <param name="termsPows">An array of powers (as strings) for each variable.</param>
+    /// <param name="compositions">List of exponent combinations (compositions) for the multinomial expansion.</param>
+    /// <returns>The fully expanded multinomial expression as a string.</returns>
+
     public static string ExpandMultinomial(int GenMultCoefsCount, string[] terms, double[] termsCoefs, string[] termsPows, List<ulong[]> compositions)
     {
         string result = "";
@@ -285,16 +347,4 @@ public class MultinomialExemp
         }
         return result.Remove(result.LastIndexOf(" + "));
     }
-    /// <summary>
-    /// There are two <see href="https://bing.com">params</see>.
-    /// <list type="number">
-    /// <item><param name="id">The user <em>id</em></param></item>
-    /// <item><param name="username">The user <em>name</em></param></item>
-    /// </list>
-    /// </summary>
-    /// <returns>The <strong>username</strong>.</returns>
-    public static string GetUserName(int id)
-        {
-            return "username";
-        }
-    }
+}

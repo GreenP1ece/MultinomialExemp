@@ -61,12 +61,4 @@ namespace MultinomialExempTest
             Assert.True(actual <= expect);
         }
     }
-    public class GenerateCompositionsTest()
-    {
-        [Fact]
-        public void GenerateCompositions()
-        {
-
-        }
-    }
 }
