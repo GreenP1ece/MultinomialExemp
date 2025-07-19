@@ -66,7 +66,7 @@ Approximate factorial and coefficient methods maintain:
 
 ≤ 1% error for smaller n with simple Stirling formula
 
-###🔍 TODO / Roadmap
+### 🔍 TODO / Roadmap
  Better support for rational exponents in symbolic output
 
  LINQ-based composition generator
